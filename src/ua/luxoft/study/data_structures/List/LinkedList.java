@@ -23,31 +23,37 @@ public class LinkedList implements List {
     public void add(Object object, int index) {
         validateIndex(index);
         Node node;
+
         if (index == size) {
             add(object);
         } else {
-            if (index <= (size / 2)) {
-                node = first;
-                for (int i = 1; i < index; i++) {
-                    node = node.next;
+            if (index == 0) {
+                Node temp = new Node(object, first, null);
+                first = temp;
+            }else {
+
+                if (index <= (size / 2)) {
+                    node = first;
+                    for (int i = 1; i < index; i++) {
+                        node = node.next;
+                    }
+                    Node temp = new Node(object, node.next, node);
+                    node.next = temp;
+                    temp.next = node.next.next;
+                    node.next.next.prev = temp;
+                } else {
+                    node = last;
+                    for (int i = size - 1; i > index; i--) {
+                        node = node.prev;
+                    }
+                    Node temp = new Node(object, node, node.prev);
+                    node.prev = temp;
+                    temp.prev = node.prev.prev;
+                    node.prev.prev.next = temp;
                 }
-                Node temp = new Node(object, node.next, node);
-                node.next = temp;
-                temp.next = node.next.next;
-                node.next.next.prev = temp;
-            } else {
-                node = last;
-                for (int i = size - 1; i > index; i--) {
-                    node = node.prev;
-                }
-                Node temp = new Node(object, node, node.prev);
-                node.prev = temp;
-                temp.prev = node.prev.prev;
-                node.prev.prev.next = temp;
-            }
-            size++;
+                size++;
+            }}
         }
-    }
 
     public Object get(int index) {
         validateIndex(index);
