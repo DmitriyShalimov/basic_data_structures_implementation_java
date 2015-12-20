@@ -1,5 +1,7 @@
 package ua.luxoft.study.data_structures.List;
 
+import java.util.*;
+
 public class LinkedList implements List {
     private Node first;
     private Node last;
@@ -98,23 +100,21 @@ public class LinkedList implements List {
         }
     }
 
-    public boolean equals(List list) {
-        if (!this.getClass().equals(list.getClass())) {
-            return false;
-        } else {
-            if (size != list.size()) {
-                return false;
-            } else {
+    public boolean equals(Object object) {
+        if (object instanceof List) {
+            List list=(List)object;
+            if (size == (list.size())) {
+
                 Node node = first;
                 for (int i = 0; i < size; i++) {
-                    if (!node.element.equals(list.get(i))) {
-                        return false;
+                    if (node.element.equals(list.get(i))) {
+                        return true;
                     }
                     node = node.next;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     public int size() {

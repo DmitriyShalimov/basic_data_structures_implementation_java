@@ -96,23 +96,17 @@ public class ArrayList implements List {
 
     @Override
     public boolean equals(Object object) {
-
-
-       /* if (!this.getClass().equals(list.getClass())) {
-            return false;
-        } else {
-            if (size != list.size()) {
-                return false;
-            } else {
+        if (object instanceof List) {
+            List list = (List) object;
+            if (size == (list.size())) {
                 for (int i = 0; i < size; i++) {
-                    if (!array[i].equals(list.get(i))) {
-                        return false;
+                    if (array[i].equals(list.get(i))) {
+                        return true;
                     }
                 }
             }
         }
-
-*/return true;
+        return false;
     }
 
     private void validateIndex(int index) {
