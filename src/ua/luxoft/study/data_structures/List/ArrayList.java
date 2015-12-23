@@ -1,7 +1,7 @@
 package ua.luxoft.study.data_structures.List;
 
 
-public class ArrayList implements List {
+public class ArrayList implements List, Iterable {
     private int size = 0;
     private Object[] array;
 
@@ -128,5 +128,42 @@ public class ArrayList implements List {
 
     public boolean checkNull(Object object) {
         return object != null;
+    }
+
+
+    @Override
+    public Iterator iterator() {
+        return new Iterator() {
+            int current = 0;
+            int lastReturn = -1;
+
+            @Override
+            public Object next() {
+                Object object;
+                if (hasNext()) {
+                    object = array[current];
+                    lastReturn = current;
+                    current++;
+
+                    return object;
+                }
+                return null;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return current < size;
+            }
+
+            @Override
+            public void remove() {
+                if (lastReturn == -1) {
+                    throw new IllegalStateException();
+                }
+                ArrayList.this.remove(lastReturn);
+                current--;
+                lastReturn = -1;
+            }
+        };
     }
 }

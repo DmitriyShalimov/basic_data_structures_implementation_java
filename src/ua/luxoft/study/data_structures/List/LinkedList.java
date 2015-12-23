@@ -1,8 +1,7 @@
 package ua.luxoft.study.data_structures.List;
 
-import java.util.*;
 
-public class LinkedList implements List {
+public class LinkedList implements List, Iterable {
     private Node first;
     private Node last;
     private int size = 0;
@@ -30,9 +29,8 @@ public class LinkedList implements List {
             add(object);
         } else {
             if (index == 0) {
-                Node temp = new Node(object, first, null);
-                first = temp;
-            }else {
+                first = new Node(object, first, null);
+            } else {
 
                 if (index <= (size / 2)) {
                     node = first;
@@ -54,8 +52,9 @@ public class LinkedList implements List {
                     node.prev.prev.next = temp;
                 }
                 size++;
-            }}
+            }
         }
+    }
 
     public Object get(int index) {
         validateIndex(index);
@@ -102,7 +101,7 @@ public class LinkedList implements List {
 
     public boolean equals(Object object) {
         if (object instanceof List) {
-            List list=(List)object;
+            List list = (List) object;
             if (size == (list.size())) {
 
                 Node node = first;
@@ -266,6 +265,42 @@ public class LinkedList implements List {
 
     public boolean checkNull(Object object) {
         return object != null;
+    }
+
+    @Override
+    public Iterator iterator() {
+        return new Iterator() {
+            int current = 0;
+            int lastReturn = -1;
+
+            @Override
+            public Object next() {
+                Object object;
+                if (hasNext()) {
+                    object = get(current);
+                    lastReturn = current;
+                    current++;
+
+                    return object;
+                }
+                return null;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return current < size;
+            }
+
+            @Override
+            public void remove() {
+                if (lastReturn == -1) {
+                    throw new IllegalStateException();
+                }
+                LinkedList.this.remove(lastReturn);
+                current--;
+                lastReturn = -1;
+            }
+        };
     }
 
     private class Node {

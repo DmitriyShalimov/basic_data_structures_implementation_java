@@ -2,27 +2,27 @@ package ua.luxoft.study.data_structures.List;
 
 
 public interface List {
-    public int size();
+     int size();
 
-    public Object get(int index);
+     Object get(int index);
 
-    public boolean contains(Object object);
+     boolean contains(Object object);
 
-    public int indexOf(Object object);
+     int indexOf(Object object);
 
-    public int lastIndexOf(Object object);
+     int lastIndexOf(Object object);
 
-    public void add(Object object);
+     void add(Object object);
 
-    public void add(Object object, int index);
+     void add(Object object, int index);
 
-    public void remove(int index);
+     void remove(int index);
 
-    public void clear();
+     void clear();
 
-    public void addCollection(List list);
+     void addCollection(List list);
 
-    public void set(Object object, int index);
+     void set(Object object, int index);
 
-    public boolean equals(Object object);
+     boolean equals(Object object);
 }
