@@ -1,10 +1,11 @@
 package ua.luxoft.study.data_structures.List;
 
+public interface Iterator {
 
-public interface Iterator  {
+    Object next();
 
-    public Object next();
-    public boolean hasNext();
-    public void remove();
+    boolean hasNext();
+
+    void remove();
 
 }

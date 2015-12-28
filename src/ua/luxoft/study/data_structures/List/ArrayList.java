@@ -2,7 +2,7 @@ package ua.luxoft.study.data_structures.List;
 
 
 public class ArrayList implements List, Iterable {
-    private int size = 0;
+    private int size;
     private Object[] array;
 
     public ArrayList() {
@@ -23,13 +23,15 @@ public class ArrayList implements List, Iterable {
     }
 
     public int indexOf(Object object) {
-        for (int i = 0; i < size; i++) {
-            if (checkNull(array[i])) {
-                if (array[i].equals(object)) {
+        if (isNotNull(object)) {
+            for (int i = 0; i < size; i++) {
+                if (object.equals(array[i])) {
                     return i;
                 }
-            } else {
-                if (array[i] == object) {
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (object == array[i]) {
                     return i;
                 }
             }
@@ -38,13 +40,15 @@ public class ArrayList implements List, Iterable {
     }
 
     public int lastIndexOf(Object object) {
-        for (int i = size - 1; i >= 0; i--) {
-            if (checkNull(array[i])) {
-                if (array[i].equals(object)) {
+        if (isNotNull(object)) {
+            for (int i = size - 1; i >= 0; i--) {
+                if (object.equals(array[i])) {
                     return i;
                 }
-            } else {
-                if (array[i] == object) {
+            }
+        } else {
+            for (int i = size - 1; i >= 0; i--) {
+                if (object == array[i]) {
                     return i;
                 }
             }
@@ -100,13 +104,36 @@ public class ArrayList implements List, Iterable {
             List list = (List) object;
             if (size == (list.size())) {
                 for (int i = 0; i < size; i++) {
-                    if (array[i].equals(list.get(i))) {
-                        return true;
+                    if (!array[i].equals(list.get(i))) {
+                        return false;
                     }
                 }
+                return true;
             }
         }
         return false;
+    }
+
+    @Override
+    public Object getFirst() {
+        return array[0];
+    }
+
+    @Override
+    public Object getLast() {
+        return array[size - 1];
+    }
+
+    @Override
+    public void removeFirst() {
+        System.arraycopy(array, 1, array, 0, array.length - 1);
+        size--;
+    }
+
+    @Override
+    public void removeLast() {
+        System.arraycopy(array, 0, array, 0, array.length - 1);
+        size--;
     }
 
     private void validateIndex(int index) {
@@ -119,14 +146,14 @@ public class ArrayList implements List, Iterable {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("ArrayList{");
+        builder.append("List{");
         for (int i = 0; i < size; i++) {
             builder.append(" ").append(array[i]).append(" ");
         }
         return builder.toString() + "}";
     }
 
-    public boolean checkNull(Object object) {
+    public boolean isNotNull(Object object) {
         return object != null;
     }
 
@@ -134,8 +161,8 @@ public class ArrayList implements List, Iterable {
     @Override
     public Iterator iterator() {
         return new Iterator() {
-            int current = 0;
-            int lastReturn = -1;
+            private int current = 0;
+            private int lastReturn = -1;
 
             @Override
             public Object next() {
@@ -147,7 +174,7 @@ public class ArrayList implements List, Iterable {
 
                     return object;
                 }
-                return null;
+                throw new IllegalStateException();
             }
 
             @Override

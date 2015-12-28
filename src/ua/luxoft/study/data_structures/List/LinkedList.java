@@ -1,10 +1,9 @@
 package ua.luxoft.study.data_structures.List;
 
-
 public class LinkedList implements List, Iterable {
     private Node first;
     private Node last;
-    private int size = 0;
+    private int size;
 
     public LinkedList() {
     }
@@ -24,7 +23,6 @@ public class LinkedList implements List, Iterable {
     public void add(Object object, int index) {
         validateIndex(index);
         Node node;
-
         if (index == size) {
             add(object);
         } else {
@@ -103,14 +101,14 @@ public class LinkedList implements List, Iterable {
         if (object instanceof List) {
             List list = (List) object;
             if (size == (list.size())) {
-
                 Node node = first;
                 for (int i = 0; i < size; i++) {
-                    if (node.element.equals(list.get(i))) {
-                        return true;
+                    if (!node.element.equals(list.get(i))) {
+                        return false;
                     }
                     node = node.next;
                 }
+                return true;
             }
         }
         return false;
@@ -120,7 +118,7 @@ public class LinkedList implements List, Iterable {
         return size;
     }
 
-    private void removeFromTheBegining(int index) {
+    private void removeFromTheBeginning(int index) {
         Node node;
         node = first;
         for (int i = 0; i < index; i++) {
@@ -152,7 +150,7 @@ public class LinkedList implements List, Iterable {
             removeLast();
         } else {
             if (index < (size / 2)) {
-                removeFromTheBegining(index);
+                removeFromTheBeginning(index);
             } else {
                 removeFromTheEnd(index);
             }
@@ -201,19 +199,22 @@ public class LinkedList implements List, Iterable {
         int index = -1;
         Node node;
         node = first;
-        for (int i = 0; i < size; i++) {
-            if (checkNull(node.element)) {
-                if (node.element.equals(object)) {
+        if (isNotNull(object)) {
+            for (int i = 0; i < size; i++) {
+                if (object.equals(node.element)) {
                     index = i;
                     break;
                 }
-            } else {
-                if (node.element == object) {
-                    index = i;
-                    break;
-                }
+                node = node.next;
             }
-            node = node.next;
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (object == node.element) {
+                    index = i;
+                    break;
+                }
+                node = node.next;
+            }
         }
         return index;
     }
@@ -222,19 +223,22 @@ public class LinkedList implements List, Iterable {
         int index = -1;
         Node node;
         node = last;
-        for (int i = size - 1; i >= 0; i--) {
-            if (checkNull(node.element)) {
-                if (node.element.equals(object)) {
+        if (isNotNull(object)) {
+            for (int i = size - 1; i >= 0; i--) {
+                if (object.equals(node.element)) {
                     index = i;
                     break;
                 }
-            } else {
-                if (node.element == object) {
-                    index = i;
-                    break;
-                }
+                node = node.prev;
             }
-            node = node.prev;
+        } else {
+            for (int i = size - 1; i >= 0; i--) {
+                if (object == node.element) {
+                    index = i;
+                    break;
+                }
+                node = node.prev;
+            }
         }
         return index;
     }
@@ -253,7 +257,7 @@ public class LinkedList implements List, Iterable {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("LinkedList{");
+        builder.append("List{");
         Node node;
         node = first;
         for (int i = 0; i < size; i++) {
@@ -263,15 +267,15 @@ public class LinkedList implements List, Iterable {
         return builder.toString() + "}";
     }
 
-    public boolean checkNull(Object object) {
+    public boolean isNotNull(Object object) {
         return object != null;
     }
 
     @Override
     public Iterator iterator() {
         return new Iterator() {
-            int current = 0;
-            int lastReturn = -1;
+            private int current = 0;
+            private int lastReturn = -1;
 
             @Override
             public Object next() {
@@ -283,7 +287,7 @@ public class LinkedList implements List, Iterable {
 
                     return object;
                 }
-                return null;
+                throw new IllegalStateException();
             }
 
             @Override
