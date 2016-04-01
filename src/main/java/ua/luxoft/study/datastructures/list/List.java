@@ -1,6 +1,6 @@
-package ua.luxoft.study.data_structures.List;
+package ua.luxoft.study.datastructures.list;
 
-public interface List {
+public interface List extends ua.luxoft.study.datastructures.Iterable {
 
     int size();
 
@@ -20,17 +20,7 @@ public interface List {
 
     void clear();
 
-    void addCollection(List list);
+    void addAll(List list);
 
     void set(Object object, int index);
-
-    boolean equals(Object object);
-
-    Object getFirst();
-
-    Object getLast();
-
-    void removeFirst();
-
-    void removeLast();
 }

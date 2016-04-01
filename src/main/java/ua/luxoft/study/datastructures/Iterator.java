@@ -1,4 +1,4 @@
-package ua.luxoft.study.data_structures.List;
+package ua.luxoft.study.datastructures;
 
 public interface Iterator {
 
@@ -7,5 +7,4 @@ public interface Iterator {
     boolean hasNext();
 
     void remove();
-
 }

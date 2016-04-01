@@ -1,11 +1,16 @@
-package ua.luxoft.study.data_structures.List;
+package ua.luxoft.study.datastructures.list;
 
+import ua.luxoft.study.datastructures.Iterator;
 
-public class ArrayList implements List, Iterable {
+public class ArrayList implements List {
     private int size;
     private Object[] array;
 
     public ArrayList() {
+        array = new Object[10];
+    }
+
+    public ArrayList(int size) {
         array = new Object[size];
     }
 
@@ -31,7 +36,7 @@ public class ArrayList implements List, Iterable {
             }
         } else {
             for (int i = 0; i < size; i++) {
-                if (object == array[i]) {
+                if (array[i] == null) {
                     return i;
                 }
             }
@@ -48,26 +53,13 @@ public class ArrayList implements List, Iterable {
             }
         } else {
             for (int i = size - 1; i >= 0; i--) {
-                if (object == array[i]) {
+                if (array[i] == null) {
                     return i;
                 }
             }
         }
         return -1;
     }
-
-    public void add(Object object, int index) {
-        validateIndex(index);
-        if (size == array.length) {
-            Object[] tempArray = new Object[size * 3 / 2 + 1];
-            System.arraycopy(array, 0, tempArray, 0, array.length);
-            array = tempArray;
-        }
-        System.arraycopy(array, index, array, index + 1, size - index);
-        array[index] = object;
-        size++;
-    }
-
 
     public void remove(int index) {
         validateIndex(index);
@@ -82,15 +74,28 @@ public class ArrayList implements List, Iterable {
         size = 0;
     }
 
-    public void addCollection(List list) {
+    public void addAll(List list) {
         for (int i = 0; i < list.size(); i++) {
             add(list.get(i));
         }
     }
 
-
     public void add(Object object) {
         add(object, size);
+    }
+
+    public void add(Object object, int index) {
+        validateIndex(index);
+        if (size == array.length) {
+            Object[] tempArray = new Object[size * 3 / 2 + 1];
+            System.arraycopy(array, 0, tempArray, 0, array.length);
+            array = tempArray;
+        }
+        if (index < size) {
+            System.arraycopy(array, index, array, index + 1, size - index);
+        }
+        array[index] = object;
+        size++;
     }
 
     public void set(Object object, int index) {
@@ -100,68 +105,53 @@ public class ArrayList implements List, Iterable {
 
     @Override
     public boolean equals(Object object) {
-        if (object instanceof List) {
-            List list = (List) object;
-            if (size == (list.size())) {
-                for (int i = 0; i < size; i++) {
-                    if (!array[i].equals(list.get(i))) {
-                        return false;
-                    }
+        if (this == object) {
+            return true;
+        }
+
+        if (!(object instanceof List)) {
+            return false;
+        }
+
+        List list = (List) object;
+        if (size != (list.size())) {
+            return false;
+        }
+
+        for (int i = 0; i < size; i++) {
+            if (isNotNull(array[i])) {
+                if (!array[i].equals(list.get(i))) {
+                    return false;
                 }
-                return true;
+            } else {
+                if (list.get(i) != null) {
+                    return false;
+                }
             }
         }
-        return false;
-    }
 
-    @Override
-    public Object getFirst() {
-        return array[0];
-    }
-
-    @Override
-    public Object getLast() {
-        return array[size - 1];
-    }
-
-    @Override
-    public void removeFirst() {
-        System.arraycopy(array, 1, array, 0, array.length - 1);
-        size--;
-    }
-
-    @Override
-    public void removeLast() {
-        System.arraycopy(array, 0, array, 0, array.length - 1);
-        size--;
-    }
-
-    private void validateIndex(int index) {
-        if (index < 0 || index > size) {
-            String message = "Index = " + index + ". Index must be between 0 and " + size;
-            throw new IndexOutOfBoundsException(message);
-        }
+        return true;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("List{");
-        for (int i = 0; i < size; i++) {
-            builder.append(" ").append(array[i]).append(" ");
+
+        builder.append("List: {").append(array[0]);
+
+        for (int i = 1; i < size; i++) {
+            builder.append(",")
+                    .append(" ")
+                    .append(array[i]);
         }
+
         return builder.toString() + "}";
     }
-
-    public boolean isNotNull(Object object) {
-        return object != null;
-    }
-
 
     @Override
     public Iterator iterator() {
         return new Iterator() {
-            private int current = 0;
+            private int current;
             private int lastReturn = -1;
 
             @Override
@@ -192,5 +182,16 @@ public class ArrayList implements List, Iterable {
                 lastReturn = -1;
             }
         };
+    }
+
+    private void validateIndex(int index) {
+        if (index < 0 || index > size) {
+            String message = "Index = " + index + ". Index must be between 0 and " + size;
+            throw new IndexOutOfBoundsException(message);
+        }
+    }
+
+    private boolean isNotNull(Object object) {
+        return object != null;
     }
 }
